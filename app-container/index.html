@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FullCycle</title>
+</head>
+
+<body>
+    <div style="display: flex; width: 100%;">
+        <div style="flex-grow: 1;"></div>
+        <div style="display: flex; flex-direction: column; height: 500px; ">
+            <h1>Full Cycle Rocks!</h1>
+            <div><input type="text" id="people-name"> <button
+                    onclick="savePeople(document.getElementById('people-name').value)">Salvar</button></div>
+            <div id="people-list" style="padding: 8px;"></div>
+        </div>
+        <div style="flex-grow: 1;"></div>
+    </div>
+</body>
+
+<script>
+    function drawPeopleList(peopleList) {
+        let peopleListHtml = '';
+
+        for (const peopele of peopleList) {
+            peopleListHtml += `<div>${peopele.name}</div>`
+        }
+
+        document.getElementById('people-list').innerHTML = peopleListHtml
+    }
+
+    function savePeople(name) {
+        if (name != '') {
+            fetch('/people', {
+                method: "POST",
+                headers: {
+                    "Content-Type": 'text/plain',
+                },
+                body: name
+            }).then((res) => {
+                res.json().then((data) => {
+                    drawPeopleList(data);
+                })
+            });
+        }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        fetch("/people", { method: "GET" }).then((res) => {
+            res.json().then((data) => {
+                drawPeopleList(data);
+            });
+        });
+    });
+</script>
+
+</html>

@@ -1,0 +1,4 @@
+node_modules
+*.pem
+db-container/*
+!db-container/.gitkeep 
